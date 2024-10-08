@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <div @click="showPicker = true">筛选</div>
-    <div @click="showPicker1 = true">筛选</div>
+    <!-- <div @click="showPicker = true">筛选</div> -->
+    <div @click="showPicker1 = true">筛选-组件化</div>
     <van-popup
       v-model="showPicker"
       closeable

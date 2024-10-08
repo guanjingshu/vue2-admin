@@ -105,6 +105,11 @@
   display: flex;
   align-items: center;
 }
+.rowcenter{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 .alignend{
   display: flex;
   align-items: flex-end;
