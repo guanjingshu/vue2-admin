@@ -7,9 +7,16 @@
     :value="showFilter"
     @input="(val) => $emit('update:showFilter', val)"
   >
+  <div>
     <ShadowBox>
       <div>
-      <RadioGroup :list="[{name:'按条线',label:'all'},{name:'按条线+赛道',label:'part'}]" @radio-change="radioChange"></RadioGroup>
+        <RadioGroup
+          :list="[
+            { name: '按条线', label: 'all' },
+            { name: '按条线+赛道', label: 'part' },
+          ]"
+          @radio-change="radioChange"
+        ></RadioGroup>
         <Title :title="type1" />
         <Grid
           ref="grid"
@@ -36,9 +43,16 @@
             </van-search>
           </form>
         </div>
-        <CheckboxList ref="checkboxList" :searchValue="searchValue" :list="managerData"/>
+        <!-- {{ managerData }} -->
+        <CheckboxList
+          ref="checkboxList"
+          :searchValue="searchValue"
+          :list="managerData"
+        />
       </div>
-    </ShadowBox>
+    </ShadowBox >
+    <Button @confirm="onConfirm" @reset="onReset"/>
+  </div>
   </van-popup>
 </template>
 <script>
@@ -101,14 +115,35 @@ export default {
   async created() {
     await this.getTrackData();
     if (this.trackData?.length > 0) {
-      // this.getManager(this.trackData[0].label);
+      this.getManager(); //this.trackData[0].label
     }
   },
   methods: {
+    async getManager(six_track) {
+      try {
+        // const param = {
+        //   six_track: six_track,
+        // }
+        // const res = await getSoaData(param);
+        // this.managerData = res.data;
+        this.managerData = [
+          { id: "1001", name: "张三", label: "张三", value: "" },
+          { id: "1002", name: "李四", label: "李四", value: "" },
+          { id: "1003", name: "王五", label: "王五", value: "" },
+          { id: "1004", name: "赵六", label: "赵六", value: "" },
+          { id: "1005", name: "钱七", label: "钱七", value: "" },
+          { id: "1006", name: "孙八", label: "孙八", value: "" },
+          { id: "1007", name: "周九", label: "周九", value: "" },
+          { id: "1008", name: "吴十", label: "吴十", value: "" },
+        ];
+      } catch (error) {
+        console.log(error);
+      }
+    },
     radioChange(mode) {
       this.show_mode = mode;
-      if(this.show_mode === 'all'){
-        this.clearCheckedItems()
+      if (this.show_mode === "all") {
+        this.clearCheckedItems();
       }
     },
     clearCheckedItems() {
@@ -138,12 +173,34 @@ export default {
         console.log(error);
       }
     },
-    chooseGridItem(item) {
-      
+    chooseGridItem(item) {},
+    onSearch() {},
+    onCancel() {},
+    onConfirm() {
+      if(this.show_mode === "part") {
+        if(!this.$refs.grid.currItem){
+          Toast("请选择赛道")
+          return
+        }
+        if(!this.$refs['checkboxList'].result?.length > 0){
+          Toast("请选择负责人")
+          return
+        }
+
+        this.$emit('update:showFilter', false)
+        if(this.show_mode === "all"){
+          this.$emit('change', {show_mode: this.show_mode,six_track: '', imgr_name:[]},this.filterTxt)
+        }else if(this.show_mode === "part"){
+          this.$emit('change', {show_mode: this.show_mode,six_track: this.currTrack, imgr_name:this.$refs['checkboxList'].result},this.filterTxt)
+        }
+      }
     },
-    onSearch(){},
-    onCancel() {
-      
+    onReset() {
+      if(this.show_mode === "all") {
+        return
+      } else if(this.show_mode === "part") {
+        this.clearCheckedItems()
+      }
     }
   },
 };
