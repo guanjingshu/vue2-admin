@@ -7,7 +7,8 @@
 <script>
 export default {
     name: 'Button',
+    
 }
 </script>
-<style lang="sass">
+<style lang="scss">
 </style>

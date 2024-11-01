@@ -78,6 +78,29 @@ export const constantRoutes = [
   },
 
   {
+    path: '/con',
+    component: Layout,
+    redirect: '/con/table1',
+    name: 'Con',
+    meta: { title: 'Con', icon: 'el-icon-s-help' },
+    children: [
+      {
+        name: 'Table1',
+        path: 'table1',
+        component: () => import('@/views/table1/index'),
+        meta: { title: 'Table1', icon: 'table' }
+      },
+      {
+        name: 'Table2',
+        path: 'table2',
+        component: () => import('@/views/table2/index'),
+        meta: { title: 'Table2', icon: 'table' }
+      },
+     
+    ]
+  },
+
+  {
     path: '/form',
     component: Layout,
     children: [

@@ -7,52 +7,52 @@
     :value="showFilter"
     @input="(val) => $emit('update:showFilter', val)"
   >
-  <div>
-    <ShadowBox>
-      <div>
-        <RadioGroup
-          :list="[
-            { name: '按条线', label: 'all' },
-            { name: '按条线+赛道', label: 'part' },
-          ]"
-          @radio-change="radioChange"
-        ></RadioGroup>
-        <Title :title="type1" />
-        <Grid
-          ref="grid"
-          :style="{ 'grid-template-columns': 'auto auto auto auto' }"
-          :disabled="disabled"
-          :list="trackData"
-          @choose-item="chooseGridItem"
-        >
-        </Grid>
-        <Title :title="type2" subTitle="长按并上下拖动调整顺序" />
-      </div>
-      <div :disabled="{ disabled: disabled }">
+    <div>
+      <ShadowBox>
         <div>
-          <form action="/">
-            <van-search
-              v-model="searchValue"
-              placeholder="请输入搜索关键词"
-              background="none"
-              right-icon="search"
-              left-icon="none"
-              @search="onSearch"
-              @cancel="onCancel"
-            >
-            </van-search>
-          </form>
+          <RadioGroup
+            :list="[
+              { name: '按条线', label: 'all' },
+              { name: '按条线+赛道', label: 'part' },
+            ]"
+            @radio-change="radioChange"
+          ></RadioGroup>
+          <Title :title="type1" />
+          <Grid
+            ref="grid"
+            :style="{ 'grid-template-columns': 'auto auto auto auto' }"
+            :disabled="disabled"
+            :list="trackData"
+            @choose-item="chooseGridItem"
+          >
+          </Grid>
+          <Title :title="type2" subTitle="长按并上下拖动调整顺序" />
         </div>
-        <!-- {{ managerData }} -->
-        <CheckboxList
-          ref="checkboxList"
-          :searchValue="searchValue"
-          :list="managerData"
-        />
-      </div>
-    </ShadowBox >
-    <Button @confirm="onConfirm" @reset="onReset"/>
-  </div>
+        <div :disabled="{ disabled: disabled }">
+          <div>
+            <form action="/">
+              <van-search
+                v-model="searchValue"
+                placeholder="请输入搜索关键词"
+                background="none"
+                right-icon="search"
+                left-icon="none"
+                @search="onSearch"
+                @cancel="onCancel"
+              >
+              </van-search>
+            </form>
+          </div>
+          <!-- {{ managerData }} -->
+          <CheckboxList
+            ref="checkboxList"
+            :searchValue="searchValue"
+            :list="managerData"
+          />
+        </div>
+      </ShadowBox>
+      <Button @confirm="onConfirm" @reset="onReset" />
+    </div>
   </van-popup>
 </template>
 <script>
@@ -177,31 +177,42 @@ export default {
     onSearch() {},
     onCancel() {},
     onConfirm() {
-      if(this.show_mode === "part") {
-        if(!this.$refs.grid.currItem){
-          Toast("请选择赛道")
-          return
+      if (this.show_mode === "part") {
+        if (!this.$refs.grid.currItem) {
+          Toast("请选择赛道");
+          return;
         }
-        if(!this.$refs['checkboxList'].result?.length > 0){
-          Toast("请选择负责人")
-          return
+        if (!this.$refs["checkboxList"].result?.length > 0) {
+          Toast("请选择负责人");
+          return;
         }
-
-        this.$emit('update:showFilter', false)
-        if(this.show_mode === "all"){
-          this.$emit('change', {show_mode: this.show_mode,six_track: '', imgr_name:[]},this.filterTxt)
-        }else if(this.show_mode === "part"){
-          this.$emit('change', {show_mode: this.show_mode,six_track: this.currTrack, imgr_name:this.$refs['checkboxList'].result},this.filterTxt)
-        }
+      }
+      this.$emit("update:showFilter", false);
+      if (this.show_mode === "all") {
+        this.$emit(
+          "change",
+          { show_mode: this.show_mode, six_track: "", imgr_name: [] },
+          this.filterTxt
+        );
+      } else if (this.show_mode === "part") {
+        this.$emit(
+          "change",
+          {
+            show_mode: this.show_mode,
+            six_track: this.currTrack,
+            imgr_name: this.$refs["checkboxList"].result,
+          },
+          this.filterTxt
+        );
       }
     },
     onReset() {
-      if(this.show_mode === "all") {
-        return
-      } else if(this.show_mode === "part") {
-        this.clearCheckedItems()
+      if (this.show_mode === "all") {
+        return;
+      } else if (this.show_mode === "part") {
+        this.clearCheckedItems();
       }
-    }
+    },
   },
 };
 </script>

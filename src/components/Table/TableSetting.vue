@@ -1,13 +1,31 @@
 <template>
   <div>
-  <!-- {{ tableColumns }} -->
+  {{ tableColumns }}
     <draggable v-model="tableColumns" group="people" @start="drag=true" @end="actionDragEnd">
       <transition-group>
         <div v-for="(item,index) in tableColumns" :key="item.prop">
-          <div>
-            <el-checkbox :label="item.prop" @change="actionSelectColumnChange">
+          <div><!--一级-->
+            <i class="font16" @click="actionShowMoreColumn(item)" :class="item.showSub?'el-icon-caret-bottom':'el-icon-caret-right'"></i>
+            <el-checkbox :label="item.prop" v-model="item.selected" @change="actionSelectColumnChange">
               {{ item.label }}
             </el-checkbox>
+          </div>
+          <div class="subs" v-if="item.showSub"><!--二级-->
+            <draggable v-model="item.columns"  @end="actionDragEnd" class="column" forceFallback="true" fallbackClass="fallClass" handle=".sortsub" animation="300" scroll-speed="500">
+              <transition-group>
+                <div v-for="(sub) in item.columns" :key="sub.prop">
+                  <div class="rowstart aligncenter ml50">
+                    
+                    <i class="font16" @click="actionShowMoreColumn(sub)" :class="sub.showSub?'el-icon-caret-bottom':'el-icon-caret-right'"></i>
+                    <div class="w200">
+                    <el-checkbox :label="sub.prop" v-model="sub.selected" @change="actionSelectColumnChange">
+                      {{ sub.label }}
+                    </el-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </transition-group>
+            </draggable>
           </div>
         </div>
       </transition-group>
@@ -49,6 +67,9 @@ export default {
     };
   },
   methods: {
+    actionShowMoreColumn(item){
+      this.$set(item,'showSub',!item.showSub)
+    },
     actionDragEnd(){
       if(this.$parent.actionChangeOtherTableColumns){
         this.$parent.actionChangeOtherTableColumns(this.tableColumns

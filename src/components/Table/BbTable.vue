@@ -62,16 +62,30 @@
         </div>
       </template>
     </el-table>
+    <div class="rowend">
+      <XyPagination v-if="showPage" class="xy-page" :child-msg="pageInfo" @callFather="getPageParam"></XyPagination>
+    </div>
   </div>
 </template>
 <script>
 import Item from "./Item.vue";
+import XyPagination from "@/components/Pagination/Pagination"
 export default {
   name: "BbTable",
   components: {
     Item,
+    XyPagination
   },
   props: {
+    showPage: {
+      type: Boolean,
+      default: false,
+
+    },
+    pageInfo:{
+      type: Object,
+      default: () => {},
+    },
     tableColumn: {
       type: Array,
       default: () => {
@@ -118,6 +132,16 @@ export default {
     this.height = this.$refs.xyTable.$el.clientHeight;
   },
   methods: {
+    getPageParam(pageInfo) {
+      if(this.multiSelection.length > 0){
+
+      }
+
+      if(this.$parent.actionPageChange){
+        this.$parent.actionPageChange(pageInfo)
+
+      }
+    },
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
         if (rowIndex % 2 === 0) {
           if (columnIndex === 0) {
