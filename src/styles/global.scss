@@ -1,3 +1,13 @@
+.h40rem{
+  height: 40px;
+}
+.c191919{
+  color: #191919;
+}
+.c9a571f{
+  color: #9a571f;
+
+}
 .absolute {
   position: absolute;
 }
@@ -125,4 +135,11 @@
 
 .mt50{
   margin-top: 50px;
+}
+.imgCover{
+  width: 100%;
+  height: 450px;
+  background-image: url("~@/images/lifecycle/base.png");
+  background-repeat: round;
+  background-size: cover;
 }

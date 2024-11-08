@@ -82,7 +82,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/con/table1',
     name: 'Con',
-    meta: { title: 'Con', icon: 'el-icon-s-help' },
+    meta: { title: 'Table-Mobile', icon: 'el-icon-s-help' },
     children: [
       {
         name: 'Table1',
@@ -95,6 +95,24 @@ export const constantRoutes = [
         path: 'table2',
         component: () => import('@/views/table2/index'),
         meta: { title: 'Table2', icon: 'table' }
+      },
+      {
+        name: 'Mobile1',
+        path: 'Mobile1',
+        component: () => import('@/views/mobile1/index'),
+        meta: { title: 'Mobile1', icon: 'table' }
+      },
+      {
+        name: 'Mobile2',
+        path: 'Mobile2',
+        component: () => import('@/views/mobile2/index'),
+        meta: { title: 'Mobile2', icon: 'table' }
+      },
+      {
+        name: 'Chart1',
+        path: 'Chart1',
+        component: () => import('@/views/chart1/index'),
+        meta: { title: 'Chart1', icon: 'table' }
       },
      
     ]

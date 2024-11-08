@@ -1,6 +1,7 @@
 <template>
     <div class="footer">
-        <div class="">{{ '数据日期'+dataDate }}<br/>{{ dataDate2 }}</div>
+        <div style="height: 40px;"></div>
+        <div class="rowstart">{{ '数据日期'+dataDate }}----{{ dataDate2 }}</div>
         <div v-for="(item,index) in list">
             <div class="rowbetween">
                 <div class="rowstart aligncenter">

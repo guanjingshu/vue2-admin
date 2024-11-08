@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table ref="xyTable" :data="tableData" :span-method="arraySpanMethod" :header-cell-style="tableHeadStyle" @sort-change="SortChangeFn">
+    <el-table border ref="xyTable" :data="tableData" :span-method="arraySpanMethod" :header-cell-style="tableHeadStyle" @sort-change="SortChangeFn">
       <el-table-column
         v-if="hasSelection"
         type="selection"

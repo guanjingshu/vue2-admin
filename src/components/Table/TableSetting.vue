@@ -1,6 +1,6 @@
 <template>
   <div>
-  {{ tableColumns }}
+  <!-- {{ tableColumns }} -->
     <draggable v-model="tableColumns" group="people" @start="drag=true" @end="actionDragEnd">
       <transition-group>
         <div v-for="(item,index) in tableColumns" :key="item.prop">

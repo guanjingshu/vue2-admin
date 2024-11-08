@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-form>
+  <div class="search-content">
+    <el-form ref="form" :inline="true" style="width: calc(100% - 100px)">
       <el-form-item
         v-for="(item, index) in newList"
         :key="index"
@@ -84,6 +84,7 @@
             >
             </el-date-picker>
           </template>
+          <SearchTree ref="trees" v-else-if="item.inputType == 'tree'" v-model="item.defaultValue"></SearchTree>
           <SearchSelect
             :ref="item.id"
             v-else-if="item.inputType == 'searchselect'"
@@ -99,7 +100,7 @@
         </TooltipWrapper>
       </el-form-item>
     </el-form>
-    <div class="form-btns">
+    <div class="form-btns rowstart aligncenter">
       <el-button type="primary" @click="actionSearch(false)">查询</el-button>
       <el-button type="primary" class="reset_btn" @click="resetForm('form')"
         >重置</el-button
@@ -112,6 +113,7 @@
 <script>
 import dayjs from "dayjs";
 import TooltipWrapper from "./TooltipWrapper";
+import SearchTree from "./SearchTree.vue";
 import SearchSelect from "./SearchSelect.vue";
 import MutiSelect from "./mutiSelect.vue";
 export default {
@@ -119,6 +121,7 @@ export default {
     TooltipWrapper,
     SearchSelect,
     MutiSelect,
+    SearchTree,
   },
   props: {
     searchData: {
@@ -235,6 +238,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search-content{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  .search-form{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .search-item{
+      margin-right: 10px;
+    }
+  }
+  .search-btn{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
 .icon-style {
   margin-left: 3px;
   margin-top: 5px;

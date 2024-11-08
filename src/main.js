@@ -26,6 +26,9 @@ import SearchPanel from '@/components/Search/index.vue'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 
+import * as echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+
 Vue.use(Vant);
 
 Vue.component('TreeTable', TreeTable)
