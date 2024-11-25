@@ -1,5 +1,33 @@
+.size8{
+  width: 8px;
+  height: 8px;
+}
+.font20{
+  font-size: 20px;
+}
+.op16{
+  opacity: 0.16;
+
+}
 .h40rem{
   height: 40px;
+}
+.h88{
+  height: 88px;
+  line-height: 88px;
+}
+.h8{
+  height: 8px;
+  line-height: 8px;
+}
+.h24{
+  height: 24px;
+  line-height: 24px;
+
+}
+.h80{
+  height: 80px;
+  line-height: 80px;
 }
 .c191919{
   color: #191919;
@@ -7,6 +35,12 @@
 .c9a571f{
   color: #9a571f;
 
+}
+.bcwhite{
+  background-color: white;
+}
+.point{
+  cursor: pointer;
 }
 .absolute {
   position: absolute;
@@ -110,6 +144,7 @@
 .alignstart{
   display: flex;
   align-items: flex-start;
+  flex-direction: column;
 }
 .aligncenter{
   display: flex;
@@ -124,7 +159,16 @@
   display: flex;
   align-items: flex-end;
 }
+.padding20{
+  padding: 20px;
+}
+.scroll{
+  overflow: scroll;
+}
+.maxh630{
+  max-height: 630px;
 
+}
 .ml50{
   margin-left: 50px;
 }
@@ -136,10 +180,51 @@
 .mt50{
   margin-top: 50px;
 }
+.flex1{
+  flex: 1;
+}
+.h40{
+  height: 40px;
+  line-height: 40px;
+}
+.h60{
+  height: 60px;
+  line-height: 60px;
+}
 .imgCover{
   width: 100%;
   height: 450px;
-  background-image: url("~@/images/lifecycle/base.png");
+  // background-image: url("~@/images/lifecycle/base.png");
   background-repeat: round;
   background-size: cover;
+}
+
+.no-wrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.normal-text {
+  white-space: normal; /* 允许文字换行 */
+  overflow: initial; /* 去掉 overflow 设置 */
+  text-overflow: initial; /* 去掉 text-overflow 设置 */
+}
+
+.disable-panel {//用于影藏暂未开发的模块
+  pointer-events: none;
+  opacity: 0.15;
+  position: relative;
+  &::after {
+    content: '功能开发中';
+    position: absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+  }
 }

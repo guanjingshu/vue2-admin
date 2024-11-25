@@ -412,6 +412,7 @@ const getColumnIndex = (
   return colspan;
 };
 const parseRange = (range) => {
+  console.log("415-range", range )
   const cols = range.match(/[A-Z]+/g).map((col) => {
     return col
       .split("")
@@ -434,8 +435,8 @@ const rangeToString = (range) => {
     let alpha = "";
     while (col > 0) {
       const modulo = (col - 1) % 26;
-      alpha = String.fromCharCode("A".charCodeAt(0) + modulo) + alpha;
-      col = Math((col - modulo - 1) / 26);
+      alpha = String.fromCharCode(65 + modulo) + alpha;
+      col = Math.floor((col - modulo) / 26);
     }
     return alpha;
   };
@@ -446,7 +447,7 @@ const rangeToString = (range) => {
 const mergeRanges = (ranges) => {
   let parsedRanges = ranges
     .map(parseRange)
-    .sort((a, b) => a.strat.row - b.strat.row || a.strat.col - b.strat.col);
+    .sort((a, b) => a.start.row - b.start.row || a.start.col - b.start.col);
   let mergedRanges = [];
   for (const range of parsedRanges) {
     let merged = false;

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <van-loading v-if="isloading" color="#1989fa" class="isloading" text-color="#3573F3" >加载中</van-loading>
+        <van-loading v-if="isLoading" color="#1989fa" class="isloading" text-color="#3573F3" >加载中</van-loading>
         <template v-else>
             <template v-if="showPage"><slot /> </template>
             <NoData v-else/>
@@ -15,7 +15,7 @@ export default {
         NoData
     },
     props: {
-        isloading: {
+        isLoading: {
             type: Boolean,
             default: true
         },

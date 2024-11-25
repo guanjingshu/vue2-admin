@@ -62,6 +62,7 @@ import Title from "./components/Title.vue";
 import Grid from "./components/Grid.vue";
 import CheckboxList from "./components/CheckboxList.vue";
 import Button from "./components/Button.vue";
+import { Toast } from "vant";
 export default {
   name: "MainRespon",
   components: {
@@ -177,6 +178,15 @@ export default {
     onSearch() {},
     onCancel() {},
     onConfirm() {
+      if(!this.$refs['checkboxList'].result?.length > 0) {
+        Toast("请选择负责人");
+        return;
+      } else {
+        localStorage.setItem('managerPeriod', JSON.stringify(this.$refs['checkboxList'].result))
+      }
+      this.$emit("update:showFilter", false);
+      this.$emit("change", { show_mode: this.show_mode,  imgr_name: this.$refs["checkboxList"].result },this.$refs["checkboxList"].result);
+      return
       if (this.show_mode === "part") {
         if (!this.$refs.grid.currItem) {
           Toast("请选择赛道");

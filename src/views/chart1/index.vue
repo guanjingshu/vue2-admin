@@ -2,30 +2,78 @@
   <!-- id="image"添加这个id即可出现水印 -->
   <!-- <SetWaterMark> -->
 
-  <div class="dashboard-container">
-    <Performance/>
+  <div class="dashboard-container relative">
+    <div class="rowgrid">
+    <!-- {{activeName}} -->
+      <StageTab v-for="(item, index) in tabsList" :key="item.index" 
+      :actived="item.index === activeName" 
+      :canClick="index > 0"
+      :whichTab="item.tableName"
+      @click="chooseStage(item.index)" />
+    </div>
+    <div>
+      <ComWrap :isOpen="isOpen">
+      <!-- {{currComponent}} -->
+        <component :is="currComponent" />
+      </ComWrap>
+    </div>
+    <!-- echarts图演示 -->
+    <!-- <el-radio-group v-model="lineType" size="mini">
+      <el-radio-button v-if="isBaphd" label="1行2列"></el-radio-button>
+      <el-radio-button label="2行2列"></el-radio-button>
+    </el-radio-group>
+    <div v-if="lineType == '1行2列'">
+      <Performance />
+    </div>
+    <div v-if="lineType == '2行2列'">
+      <Performance2 />
+    </div> -->
+    <!-- echarts图演示 end -->
   </div>
   <!-- </SetWaterMark> -->
 </template>
 
 <script>
-import {getExportData} from '@/utils/exportExcel'
+import { getExportData } from "@/utils/exportExcel";
 import { mapGetters } from "vuex";
 import { getWaterMark } from "@/utils";
 import SetWaterMark from "@/components/SetWaterMark";
 import PublicStructure from "@/components/PublicStructure";
-import Performance from './Card/Performance.vue';
-
-import dayjs from 'dayjs'
+import Performance from "./Card/Performance.vue";
+import Performance2 from "./Card/Performance2.vue";
+import StageTab from "./components/StageTab.vue";
+import ComWrap from "./components/ComWrap.vue";
+import Plan from "./Stage/Plan/index.vue";
+import Create from "./Stage/Create/index.vue";
+import Run from "./Stage/Run/index.vue";
+import NearExpired from "./Stage/NearExpired/index.vue";
+import Expired from "./Stage/Expired/index.vue";
+import { isBaphd } from "@/utils";
+import dayjs from "dayjs";
 export default {
   name: "Dashboard",
   components: {
     SetWaterMark,
     PublicStructure,
-    Performance
+    Performance,
+    Performance2,
+    StageTab,
+    ComWrap,
+    Plan,
+    Create,
+    Run,
+    NearExpired,
+    Expired,
+
   },
 
   computed: {
+    currComponent() {
+      return this.tabsList.find(item => item.index === this.activeName)?.componentName ?? null
+    },
+    isOpen(){
+      return !!this.tabsList.find(item => item.index === this.activeName)?.isOpen
+    },
     ...mapGetters({
       name: "name",
       iconsAll: "icons",
@@ -53,7 +101,8 @@ export default {
       let style = {
         top: "10px",
         height: "40px",
-        backgroundImage: "linear-gradient(270deg, rgba(0, 171, 254, 0) 0%, #0072fc 100%)",
+        backgroundImage:
+          "linear-gradient(270deg, rgba(0, 171, 254, 0) 0%, #0072fc 100%)",
       };
       if (this.selectedTabIndex == 0) {
         style.width = "100px";
@@ -67,9 +116,9 @@ export default {
       }
     },
   },
-  created(){
-    let date = dayjs(new Date()).add(-1,'day').format('YYYYMMDD');
-    this.formData.date = date
+  created() {
+    let date = dayjs(new Date()).add(-1, "day").format("YYYYMMDD");
+    this.formData.date = date;
   },
   mounted() {
     console.log(
@@ -78,29 +127,38 @@ export default {
     );
     this.$nextTick(() => {
       // this.$set(this.$refs.search.form, "is_bot", "test");
-
       // this.getImage()
       // this.getTableColumn(
       //   this.columns.split(","),
       //   this.columns_desc.split(",")
       // );
-      
     });
     // this.setDefaultForm()
-
-    
   },
   data() {
     return {
-      pageInfo:{
+      tabsList: [
+        { tableName: "合计", index: "0", imgSrc: require("@/images/zz.png") },
+        { tableName: "Plan", index: "1", imgSrc: require("@/images/zz.png"), imgSrcActivated: require("@/images/zz.png"),componentName:Plan,isOpen: true },
+        { tableName: "Create", index: "2", imgSrc: require("@/images/zz.png"), imgSrcActivated: require("@/images/zz.png"),componentName:Create,isOpen: true },
+        { tableName: "Expired", index: "3", imgSrc: require("@/images/zz.png"), imgSrcActivated: require("@/images/zz.png"),componentName:Expired,isOpen: true },
+        { tableName: "Run", index: "4", imgSrc: require("@/images/zz.png"), imgSrcActivated: require("@/images/zz.png"),componentName:Run,isOpen: true },
+        { tableName: "NearExpired", index: "5", imgSrc: require("@/images/zz.png"), imgSrcActivated: require("@/images/zz.png"),componentName:NearExpired,isOpen: true },
+
+        
+      ],
+      activeName: "4",
+      lineType: "1行2列",
+      isBaphd: isBaphd(),
+      pageInfo: {
         page_num: 1,
         page_size: 1,
         total: 6,
-
       },
       testData: [],
-      searchData: [ //查询条件配置
-        
+      searchData: [
+        //查询条件配置
+
         // { name: "is_bot", inputType: "mutiSelect", data: [{ label: "test", value: "test" },{ label: "test", value: "test" }] },
         // { name: "tongji", inputType: "searchselect", placeholder: "统计",list:[{title:'规模',label:'规模'},{title:'规模1',label:'规模1'},{title:'规模2',label:'规模2'}],defaultValue: "规模" },
         // {
@@ -116,11 +174,10 @@ export default {
         // { name: "is_bot", inputType: "input", content: "test" },
         // {name:'date',inputType:'date'},
         { name: "start_at--end_at", content: "test", inputType: "daterange" },
-        
+
         // {id:100510,label:"是否包含0份额产品",placeholder:'是否包含0份额产品',name: "container", inputType: "select",tips:'是否包含0份额产品' ,list: [
         //   {id:2511,name:'contain',value:'1',label: "是包含0份额产品"},{id:2512,name:'contain',value:'2',label: "否包含0份额产品"}
         // ] },
-        
       ],
       currType: "产品",
 
@@ -235,8 +292,8 @@ export default {
       ],
       n: 0,
       selectedTabIndex: 0,
-      tabImages: ['tab1', 'tab2', 'tab3'],
-      tabs: ['公司', '事业', '主责'],
+      tabImages: ["tab1", "tab2", "tab3"],
+      tabs: ["公司", "事业", "主责"],
       selectTabIndex: 0,
       list: [
         {
@@ -256,36 +313,36 @@ export default {
           amount12: "",
         },
       ],
-      formData: {expired: false},
+      formData: { expired: false },
     };
   },
   methods: {
-    tabChange(item, index){
-      this.selectTabIndex = index
-
+    chooseStage(index){
+      this.activeName = index
     },
-    actionPage(item){
-      if(item.title == '产品日报'){
-        this.$router.push({name:'Mobile2'})
+    tabChange(item, index) {
+      this.selectTabIndex = index;
+    },
+    actionPage(item) {
+      if (item.title == "产品日报") {
+        this.$router.push({ name: "Mobile2" });
       }
     },
-    actionPageChange(pageInfo){
-      let param = {mapping_id:"100000",...this.formData,...this.pageInfo}
-      delete param["total"]
-      this.getData(param)
+    actionPageChange(pageInfo) {
+      let param = { mapping_id: "100000", ...this.formData, ...this.pageInfo };
+      delete param["total"];
+      this.getData(param);
     },
-    onSameDay(){
+    onSameDay() {},
+    setDefaultForm() {
+      this.$refs.search.form = {};
+      const date = dayjs(new Date()).add(-1, "day");
+      this.$set(this.$refs.search.form, "date", date);
 
-    },
-    setDefaultForm(){
-      this.$refs.search.form = {}
-      const date = dayjs(new Date()).add(-1,'day')
-      this.$set(this.$refs.search.form, 'date',date) 
-
-      this.$refs.search.form["start_at--end_at"]=[
-        dayjs(new Date()).add(-1,"day").startOf("day"),
-        dayjs(new Date()).add(-1,"day").endOf("day"),
-      ]
+      this.$refs.search.form["start_at--end_at"] = [
+        dayjs(new Date()).add(-1, "day").startOf("day"),
+        dayjs(new Date()).add(-1, "day").endOf("day"),
+      ];
     },
     test() {
       let searchList = [
@@ -316,7 +373,7 @@ export default {
     },
     confirm() {},
     cancel() {},
-    
+
     getTitle(title) {
       return title.length > 4
         ? title.slice(0, 4) + "<br/>" + title.slice(4)
@@ -579,14 +636,25 @@ export default {
       }
     },
     exportExcel() {
-      let result = getExportData(this.tableColumns,this.tableData,'title',['title'],[]);
+      let result = getExportData(
+        this.tableColumns,
+        this.tableData,
+        "title",
+        ["title"],
+        []
+      );
       this.$refs.search.startExport(result);
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.rowgrid {
+  display: grid;
+  grid-gap: 0px 12px;
+  grid-template-columns: auto auto auto auto auto auto;
+}
 .del-popover {
   left: 1645px !important;
   padding: 0px !important;

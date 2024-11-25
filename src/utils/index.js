@@ -191,7 +191,9 @@ export function clearFalseData(data) { // 清除所有子节点为false的数据
 }
 
 export function isBaphd() {
-  return process.env.VUE_APP_OUT_PATH === "baphd";
+  console.log("195",process.env.VUE_APP_OUT_PATH=== "baphd")
+  return process.env.VUE_APP_OUT_PATH === "/baphd";
+  
 }
 
 export function getExcelColumnName(key){
@@ -253,7 +255,7 @@ export function getExcelColumnName(key){
     }
     return dic[key]
   }
-  let getExcelColumnName = ''
+  // let getExcelColumnName = ''
   let i = 0
   while (key > 0) {
     i = key % 26

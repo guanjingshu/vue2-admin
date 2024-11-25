@@ -9,7 +9,8 @@
     <BbTable
       :table-column="tableColumns"
       :table-data="tableData"
-      
+      :rowSpans="rowSpans"
+      :table-head-style="setTableHeadStyle"
     ></BbTable>
   </div>
 </template>
@@ -20,8 +21,21 @@ export default {
   name: 'Table1',
   data() {
     return {
-      searchData: [ {name:'date',inputType:'date'},],
-      tableData:[],
+      searchData: [ 
+        {name:'date',inputType:'date'},
+        {id:1002,label: "产品分类",inputType:"tree" ,defaultValue:[{id:3016,label:"固定收益类",name:'jg_fourth_type',value:""}],list:[
+         {id:2001,label:'监管四分类',list:[{id:3016,label:"固定收益类",name:'jg_fourth_type',value:""}]}
+        ,{id:2002,label:'监管四分类2',list:[{id:3017,label:"固定收益类2",name:'jg_fourth_type2',value:""}]}]},
+        // { name: "start_at--end_at", content: "test", inputType: "daterange" },
+      ],
+      columns:"sta_type,type2,six_track,amount1,amount4,amount3,amount2",
+      columns_desc:"分类,分类,分类,DATEXX,较上年末, 较上季度,较上个月",
+      tableData:[
+        {sta_type:'aaa',type2:'bbb',six_track:'ccc',amount1:1,amount2:2,amount3:3,amount4:4},
+        {sta_type:'aaa',type2:'bbb',six_track:'ccc',amount1:1,amount2:2,amount3:3,amount4:4},
+        {sta_type:'aaa',type2:'bbb',six_track:'ccc',amount1:1,amount2:2,amount3:3,amount4:4},
+      ],
+      rowSpans: [],
       tableColumns: [
         // {
         //   prop: "date",
@@ -76,6 +90,15 @@ export default {
       ],
     }
   },
+  watch: {
+    'tableData':{
+      handler(newVal){
+        this.rowSpans = this.$getColumnRow(['sta_type','type2','six_track'],this.tableData)
+        console.log("96====rowSpans", rowSpans)
+      },
+      // immediate: true
+    }
+  },
   created() {
     this.$nextTick(() => {
       this.tableColumns = productColumns
@@ -84,16 +107,51 @@ export default {
   mounted() {
     let a = 'aaa,bbb'
     let b = '是AAA,是BBB'
-    this.tableColumns = productColumns
+    // this.tableColumns = productColumns
     this.getTableColumn(this.tableColumns,a.split(','),b.split(','))
+    let tableData = [
+        {sta_type:'aaa',type2:'bbb',six_track:'ccc',amount1:1,amount2:2,amount3:3,amount4:4},
+        {sta_type:'aaa',type2:'bbb',six_track:'ccc',amount1:1,amount2:2,amount3:3,amount4:4},
+        {sta_type:'aaa',type2:'bbb',six_track:'ccc',amount1:1,amount2:2,amount3:3,amount4:4},
+      ]
+    // this.tableColumns = this.getTableColumnOne(this.columns,this.columns_desc)
+    // this.tableColumns = this.getTableColumn(this.columns,this.columns_desc)
+    this.rowSpans = this.$getColumnRow(['sta_type','type2','six_track'], tableData)
+    console.log("96====rowSpans", this.rowSpans)
     this.setDefaultForm()
     console.log('table1 mounted')
   },
   methods: {
+    setTableHeadStyle({row, column, rowIndex, columnIndex}){
+      if(column.label == '分类'){
+        if(columnIndex == 0){
+          this.$nextTick(()=>{
+            document.querySelector(`.${column.id}`).setAttribute('colspan', '3')
+            document.querySelector(`.el-table__fixed-header-wrapper.${column.id}`).setAttribute('colspan', '3')
+          })
+        }else if(columnIndex == 1){
+          row[columnIndex].colspan = 0
+          return {display: 'none'}
+        } else if(columnIndex == 2){
+          row[columnIndex].colspan = 0
+          return {display: 'none'}
+
+        }
+      }
+      return {
+        color: '#191919',
+        background: '#F8F9FC',
+        padding: '4px 0px'
+      }
+    },
     setDefaultForm(){
       this.$refs.search.form = {}
       const date = dayjs(new Date()).add(-1,'day')
       this.$set(this.$refs.search.form, 'date',date) 
+      this.$refs.search.form["start_at--end_at"]=[
+        dayjs(new Date()).add(-1,"day").startOf("day"),
+        dayjs(new Date()).add(-1,"day").endOf("day"),
+      ]
     },
     actionSearch(form) {
       console.log("196", form);
@@ -155,6 +213,23 @@ export default {
       }
       return columns;
 
+    },
+    // ---------单层---------
+    getTableColumnOne(columns, columnsDesc){
+      const columnObjArr = []
+      let columnArr = columns.split(',');
+      let descArr = columnsDesc.split(',');
+      columnArr.forEach((item,index)=>{
+        columnObjArr.push({
+          selected: true,
+          prop: item,
+          label: descArr[index],
+          minWidth: 120,
+          align: "left",
+          id: index+1,
+        })
+      })
+      return columnObjArr
     },
     modifyData(list){
       if(list){

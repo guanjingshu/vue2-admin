@@ -1,18 +1,28 @@
 <template>
   <div id="busi-asset-products">
     <Tabs @switch-tab="switchTab" />
+    <FilterBar :tabName="tabName"
+      :levelInfo1="levelInfo1"
+      :levelInfo2="levelInfo2"
+      @filter-change="filterChange"
+      @change-level="changeLevel"
+      @pick-day="pickDay"
+    />
     <div class="container">
       <div v-show="tabName === '公司'">
-        <LoadingWrap :isLoadiing="isLoading" :showPage="list.length > 0">
+      {{ list }}-----
+        <LoadingWrap :isLoading="isLoading" :showPage="list.length > 0">
           <div
             class="mb12rem"
-            v-for="(item, inde) in list"
+            v-for="(item, index) in list"
             :key="item.BUSI_TYPE"
           >
-            <Title
+            <!-- <Title
               :title="item.BUSI_TYPE"
               :img="getIcon(index, item.BUSI_TYPE)"
-            ></Title>
+            ></Title> -->
+            {{ columns }}
+            <TypeTable :isBold="true" :whichTable="false" :tableColumn="columns[index]" :tableData="item.DATA"></TypeTable>
           </div>
         </LoadingWrap>
       </div>
@@ -25,9 +35,12 @@
 <script>
 import dayjs from "dayjs";
 import Tabs from "./components/Tabs.vue";
+import FilterBar from "./components/FilterBar.vue";
 import LoadingWrap from "@/components/LoadingWrap.vue";
 import Title from "./components/Title.vue";
+import TypeTable from "./components/TypeTable.vue";
 import { Toast } from "vant";
+import { TableColumn } from "element-ui";
 
 const mappingIdCfg = {
   公司: "1",
@@ -39,8 +52,10 @@ export default {
   name: "Mobile2",
   components: {
     Tabs,
+    FilterBar,
     LoadingWrap,
     Title,
+    TypeTable
   },
   data() {
     return {
@@ -51,6 +66,9 @@ export default {
       levelInfo2: { name: "至四级", level: 4 },
       isLoading: false,
       list: [],
+      listRes: {columns:"BUSI_TYPE,AMOUNT1,AMOUNT2,AMOUNT5,AMOUNT3,AMOUNT4",columns_align:"",columns_desc:"05/31,较上一工作日,较上周末,较上周末2,较上周末3",
+        list:[{BUSI_TYPE:"公司",DATA:[{AMOUNT1:"0",AMOUNT2:"0",AMOUNT3:"0",AMOUNT4:"0",AMOUNT5:"0"}]}]
+      },
       columns: [[], [], []],
       list2: [],
       columns2: [[], [], []],
@@ -80,6 +98,10 @@ export default {
   },
   created() {
     this.tabName = this.$route.params.type ?? "公司";
+    
+  },
+  mounted() {
+    this.getData();
   },
   methods: {
     filterChange(params) {
@@ -90,6 +112,9 @@ export default {
         this.managerParams = params.show_mode;
         this.getData();
       }
+    },
+    changeLevel(){
+
     },
     getParams(tabName) {
       if (tabName === "公司") {
@@ -132,16 +157,21 @@ export default {
     },
     async getData() {
       try {
-        this.isloading = true;
+        this.isLoading = false;
         let res = {};
-        res = await getSoaData(this.getParams("公司"));
+        // res = await getSoaData(this.getParams("公司"));
+        res = this.listRes;
         this.list = res.list;
+        console.log("this.list",this.list);
+        
         this.columns[0] = this.getTableColumn(
           "公司",
           res.columns.split(","),
           res.columns_desc.split(","),
           0
         );
+        console.log("this.columns[0]",this.columns[0]);
+        return
         this.columns[1] = this.getTableColumn(
           "公司",
           res.columns.split(","),
@@ -154,6 +184,8 @@ export default {
           res.columns_desc.split(","),
           2
         );
+        this.isloading = false;
+        return
         res = {};
         res = await getSoaData(this.getParams("条线"));
         this.list2 = res.list;
@@ -198,12 +230,12 @@ export default {
         );
       } catch (error) {
         this.isloading = false;
-        this.list = [];
-        this.columns = [[], [], []];
-        this.list2 = [];
-        this.columns2 = [[], [], []];
-        this.list3 = [];
-        this.columns3 = [[], [], []];
+        // this.list = [];
+        // this.columns = [[], [], []];
+        // this.list2 = [];
+        // this.columns2 = [[], [], []];
+        // this.list3 = [];
+        // this.columns3 = [[], [], []];
       } finally {
         this.isloading = false;
       }
@@ -235,7 +267,7 @@ export default {
           "较上月末",
           "较上年末",
         ];
-        return singleLayer.map((item, index) => {
+        return singleLayer.map((label, index) => {
           return {
             selected: true,
             label: label === "当前日期数据" ? this.chooseDateStr : label,

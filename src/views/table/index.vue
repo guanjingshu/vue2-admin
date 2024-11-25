@@ -1,9 +1,11 @@
 <template>
   <div class="app-container">
+    <van-icon name="question" @click="showTips()"></van-icon>
     <!-- <div @click="showPicker = true">筛选</div> -->
     <div @click="showPicker1 = true">筛选-组件化</div>
     <div class="rowstart" @click="showPicker2 = true">
       <van-icon name="info-o"></van-icon>
+      
       <div></div>
       指标说明
     </div>
@@ -547,18 +549,18 @@ export default {
     this.getData();
     document
       .querySelector("#app")
-      .addEventListener("touchstart", this.removeToast());
+      .addEventListener("touchstart", this.removeToast);
   },
   beforeDestroy() {
     document
       .querySelector("#app")
-      .addEventListener("touchstart", this.removeToast());
+      .removeEventListener("touchstart", this.removeToast);
   },
-  deactivated() {
-    document
-      .querySelector("#app")
-      .addEventListener("touchstart", this.removeToast());
-  },
+  // deactivated() {
+  //   document
+  //     .querySelector("#app")
+  //     .removeEventListener("touchstart", this.removeToast);
+  // },
   methods: {
     addTestData() {
       this.selectOptions = [];
@@ -576,6 +578,7 @@ export default {
     // tips时间设置
     showTips() {
       Toast.setDefaultOptions({ duration: 8000 });
+      Toast({ message: "提示信息", icon: "warning",className: "toast"});
       Toast.resetDefaultOptions();
     },
     removeToast() {

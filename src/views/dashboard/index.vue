@@ -1,8 +1,8 @@
 <template>
   <!-- id="image"添加这个id即可出现水印 -->
   <!-- <SetWaterMark> -->
-
   <div class="dashboard-container ">
+    {{ common_query }}
   <!-- ---------------移动端首页------------------ -->
     <!-- 头部结构 blue-bg-->
     <!-- <div class="rowbetween header-top">
@@ -56,6 +56,7 @@
     />
     <!-- <TableSetting :tableColumnSetting="tableColumns"></TableSetting> -->
     <BbTable
+      ref="BbTable"
       :table-column="tableColumns"
       :table-data="tableData"
       :table-head-style="setTableHeadStyle"
@@ -105,25 +106,41 @@
 </template>
 
 <script>
-import {getExportData} from '@/utils/exportExcel'
-import { mapGetters } from "vuex";
+import { getExportData } from '@/utils/exportExcel.js'
+import { mapGetters,mapState } from "vuex";
 import { getWaterMark } from "@/utils";
 import SetWaterMark from "@/components/SetWaterMark";
 import PublicStructure from "@/components/PublicStructure";
 import Calendar from "./componets/calendar";
 import dayjs from 'dayjs'
+import {roundDecimal} from '@/utils/arrOperation.js'
+import mixinTable from './componets/mixinTable';
 export default {
   name: "Dashboard",
+  mixins: [mixinTable],
   components: {
     SetWaterMark,
     PublicStructure,
     Calendar,
   },
-
+watch: {
+  'tableColunm': {
+    handler(val) {
+      this.$nextTick(()=>{
+        console.log("127---this.$refs.BbTable.$ref.xyTable",this.$refs.BbTable.$ref.xyTable)
+        // this.$refs.BbTable.$ref.xyTable.doLayout()
+      })
+    },
+    // immediate:true
+  }
+},
   computed: {
     ...mapGetters({
       name: "name",
       iconsAll: "icons",
+    }),
+    ...mapState({
+      common_query: (state) => state.common.common_query,
     }),
     icons() {
       return this.iconsAll.filter((menu) => menu.type === this.currType);
@@ -132,12 +149,21 @@ export default {
   created(){
     let date = dayjs(new Date()).add(-1,'day').format('YYYYMMDD');
     this.formData.date = date
+   
   },
   mounted() {
-    console.log(
-      "this.$formatNumber(1589992.365487,2,1)",
-      this.$formatNumber("1589992.365487", 2, 1)
-    );
+    this.$nextTick(() => {
+      this.$nextTick(()=>{
+        console.log('roundDecimal(0.0000566)', roundDecimal('0.0000566'))
+        // console.log("127---this.$refs.BbTable.$ref.xyTable",this.$refs.BbTable.$refs.xyTable)
+      })
+      
+    })
+    
+    // console.log(
+    //   "this.$formatNumber(1589992.365487,2,1)",
+    //   this.$formatNumber("1589992.365487", 2, 1)
+    // );
     this.$nextTick(() => {
       this.$set(this.$refs.search.form, "is_bot", "test");
 
@@ -151,12 +177,19 @@ export default {
 
     
   },
+  beforeDestroy() {
+    this.$store.commit("common/SET_COMMON_QUERY", {}); //清空查询条件
+  },
+  deactivated() {
+    this.$store.commit("common/SET_COMMON_QUERY", {}); //清空查询条件
+  },
   data() {
     return {
       pageInfo:{
         page_num: 1,
         page_size: 1,
         total: 6,
+        combinedColumnCount: 0
 
       },
       testData: [],
@@ -643,7 +676,8 @@ export default {
       }
     },
     exportExcel() {
-      let result = getExportData(this.tableColumns,this.tableData,'title',['title'],[]);
+      // let result = getExportData(this.tableColumns,this.tableData,'title',['title'],[]);
+      let result = getExportData(this.tableColumns,this.tableData,'title',[]);
       this.$refs.search.startExport(result);
     }
   },

@@ -7,7 +7,7 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    menuList: [],//后端配置权限菜单
+    menuList: [{code:'product-report'}],//后端配置权限菜单
     iconList: [
       {title:'产品日报',type: '产品',icon: 'zz',code:'product-report', path:'/product-report'}
     ]
@@ -34,6 +34,9 @@ const mutations = {
   },
   SET_MENU_LIST: (state, {menuList}) => {
     state.menuList = menuList
+  },
+  SET_AUTH_INFO: (state, payload) => {
+    state.authInfo = payload
   }
 }
 

@@ -84,7 +84,7 @@
             >
             </el-date-picker>
           </template>
-          <SearchTree ref="trees" v-else-if="item.inputType == 'tree'" v-model="item.defaultValue"></SearchTree>
+          <SearchTree ref="trees" v-else-if="item.inputType == 'tree'" v-model="item.defaultValue" :treeData="item" @setTreeFormData="setTreeFormData"></SearchTree>
           <SearchSelect
             :ref="item.id"
             v-else-if="item.inputType == 'searchselect'"
@@ -145,6 +145,15 @@ export default {
     },
   },
   methods: {
+    setTreeFormData(treeForm, callBack){//获取树形组件的值
+      if(callBack){
+        callBack(this.form)
+      }
+      for(const key in treeForm){
+        this.form[key] = treeForm[key]
+      }
+      this.$emit('setTreeFormData',treeForm)
+    },
     actionPickChange(value){
       if(Array.isArray(value)){
         this.$emit('sameDay',value[0].toString() == value[1]?.toString(),value)
@@ -152,6 +161,7 @@ export default {
       if(Array.isArray(value) && value.length == 2){
         this.$emit('setDateValue',value[1])
       }
+      this.$forceUpdate()
     },
     getRange(time) {
       if (this.isRangeDisable) {

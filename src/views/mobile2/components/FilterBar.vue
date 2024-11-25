@@ -9,7 +9,7 @@
             </div>
         </div>
         <FilterPanel :showFilter.sync="showPanel2" @change="filterChange" :checkedManager="checkedManager"/>
-        <van-popup v-model="showPanel" position="bottom">
+        <van-popup v-model="showPicker" position="bottom">
             <van-datetime-picker v-model="currentDate" type="date" :formatter="dateformatter" @confirm="actionSelectDate" @cancel="showPanel=false" />
         </van-popup>
     </div>
@@ -71,7 +71,8 @@ export default {
     },
     methods: {
         filterChange(params, filterTxt){
-            this.$emit('filter-change', params)
+            console.log('74----filter-change', params,filterTxt)
+            return
             if(this.tabName==='条线') {
 
             }else if(this.tabName==='主责') {

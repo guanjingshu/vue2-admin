@@ -60,13 +60,13 @@ export default {
 
                 },
                 legend: {
-                    
+                    top:'10'
                 },
                 grid: {
-                    top: '20%',
-                    right: '3.8%',
+                    top: '30%',
+                    right: '5%',
                     bottom: '15%',
-                    left: '3.8%',
+                    left: '5%',
 
                 },
                 xAxis: [
@@ -78,7 +78,12 @@ export default {
                             show:false
                         },
                         axisLine:{
-                            show:false
+                            // show:false
+                            lineStyle:{
+                                type:'solid',
+                                color:'#969799',
+
+                            }
                         },
                         axisPointer: {
                             type: 'shadow'
@@ -115,7 +120,7 @@ export default {
                             show: true,
                             gap: 20,
                             lineStyle: {
-                                type:'dashed'
+                                type:'solid'
                             }
                         }
 

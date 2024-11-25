@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table border ref="xyTable" :data="tableData" :span-method="arraySpanMethod" :header-cell-style="tableHeadStyle" @sort-change="SortChangeFn">
+    <el-table border ref="xyTable" :data="tableData"  :header-cell-style="tableHeadStyle" @sort-change="SortChangeFn" :span-method="objectSpanMethod">
       <el-table-column
         v-if="hasSelection"
         type="selection"
@@ -98,6 +98,10 @@ export default {
         return [];
       },
     },
+    rowSpans: {
+      type: Array,
+      default: ()=>([])
+    },
     hasSelection: {
       type: Boolean,
       default: false,
@@ -140,6 +144,17 @@ export default {
       if(this.$parent.actionPageChange){
         this.$parent.actionPageChange(pageInfo)
 
+      }
+    },
+    objectSpanMethod({row, column, rowIndex, columnIndex}){
+      for(let item of this.rowSpans) {
+        if(column.property == item.columnName){
+          for(const obj of item.rowSpan){
+            if(rowIndex == obj.from){
+              return obj.value
+            }
+          }
+        }
       }
     },
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {

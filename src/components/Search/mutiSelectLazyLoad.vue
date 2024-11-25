@@ -61,3 +61,25 @@
     </div>
     </el-popover>
 </template>
+<script>
+export default {
+    name: "mutiSelectLazyLoad",
+    props: {
+        data: {
+            type: Array,
+            default: () => ([])
+        },
+        allData: {
+            type: Object,
+            default: () => ({})
+        },
+        placeHolder: {
+            type: String,
+            default: ()=>""
+        }
+    },
+    filters: {
+        
+    }
+}
+</script>

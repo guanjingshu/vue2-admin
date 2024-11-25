@@ -1,4 +1,4 @@
-export function tihuan(arr) {
+export function tihuan(arr2) {
   let arr = [
     { content: 1 },
     { content: 2 },
@@ -12,7 +12,7 @@ export function tihuan(arr) {
   console.log(arr);
 }
 
-export function cha_ru_xiu_gai(arr) {//插入并修改
+export function cha_ru_xiu_gai(arr2) {//插入并修改
   // 这段代码首先找到busi_type1为合计和负债的元素，然后将合计元素插入到负债元素之前，并删除负债元素。最后，将busi_type2和busi_type3的值修改为资产合计。
   let arr = [
     {busi_type1:'',busi_type2:'',busi_type3:''},
@@ -101,3 +101,13 @@ let arrData=[{
     }]
   }]
 }]
+
+// 0.000056 -> 0.00006 0.0041->0.004四舍五入
+export function roundDecimal(floatNumber) {
+  if(parseFloat(floatNumber)===0) return 0;
+  const index = floatNumber.split('.')[1].split('').findIndex(num => /[1-9]/.test(num));
+  if(index > -1){
+    return Math.round(parseFloat(floatNumber) * Math.pow(10, index + 1)) / Math.pow(10, index + 1);
+  }
+  return floatNumber;
+}
