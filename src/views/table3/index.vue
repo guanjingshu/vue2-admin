@@ -5,35 +5,71 @@
       :searchData="searchData"
       @actionSearch="actionSearch"
     />
-    <!-- <TableSetting :tableColumnSetting="tableColumns"></TableSetting> -->
-    <BbTable
-      :table-column="tableColumns"
-      :table-data="tableData"
-      :rowSpans="rowSpans"
-      :table-head-style="setTableHeadStyle"
-    ></BbTable>
+    <div class="relative">
+      <div class="btn_edit">
+        <el-button type="primary" icon="el-icon-plus" @click="addRule('指数收益率配置')">新建</el-button>
+      </div>
+    
+      <BbTable
+        :table-column="tableColumns"
+        :table-data="tableData"
+        :rowSpans="rowSpans"
+        :table-head-style="setTableHeadStyle"
+        :noOperation="true"
+      >
+        <template slot-scope="row">
+          <div class="relative fullwidth rowcenter">
+            <span class="point" 
+            :class="{disabled: checkCanEdit(row.row)}"
+            @click="showDialog(row.row, '指数收益配置')"
+            >
+              编辑
+            </span>
+            <span class="btn_line"></span>
+            <el-popover
+              popper-class="del-popover"
+              trigger="manual"
+              placement="top"
+              width="210"
+              :ref="`popover-${row.index}`"
+            >
+              <div class="delete_con">
+                <div class="tips tips_te">
+                  <i class="el-icon-info" color="#ffab00"></i>
+                  确定删除这行数据吗？
+                </div>
+                <div class="btns">
+                  <span class="point" @click="doClose(row.row, row.index)">取消 </span>
+                  <span class="point" @click="deleteT(row.row, row.index)">确定 </span>
+                </div>
+              </div>
+              <span
+                slot="reference"
+                class="reset_btn point"
+                :class="{disabled: checkCanDel(row.row)}"
+                @click="showDia(row.row, row.index)"
+              >删除</span>
+            </el-popover>
+          </div>
+        </template>
+      </BbTable>
+      <setIndication v-if="setConFlag" :tip_title="tip_title" :setConFlag="setConFlag"></setIndication>
+    </div>
   </div>
 </template>
 <script>
 import { productColumns } from "./tableColumn.js";
+import setIndication from "./setIndication.vue";
 import dayjs from "dayjs";
 export default {
   name: "Table1",
+  components: {
+    setIndication
+  },
   data() {
     return {
       searchData: [
         { name: "date", inputType: "date" },
-        { inputType: "mutiSelectLazyLoad",data:[{id:2001,label:'子产品代码,父产品代码',
-        list:[{id:3001,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3002,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3003,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3004,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3005,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3006,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3007,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3008,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3009,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-        ]}] },
         {
           id: 1002,
           label: "产品分类",
@@ -159,6 +195,8 @@ export default {
         //   type: "left",
         // },
       ],
+      tip_title: "",
+      setConFlag: false,
     };
   },
   watch: {
@@ -223,6 +261,18 @@ export default {
     console.log("table1 mounted");
   },
   methods: {
+    addRule(title_tip){
+      this.setConFlag = true
+      this.tip_title = title_tip;
+      this.recordId = null;
+      this.setData = {}
+    },
+    checkCanEdit(){},
+    showDialog(){},
+    doClose(){},
+    deleteT(){},
+    checkCanDel(){},
+    showDia(){},
     setTableHeadStyle({ row, column, rowIndex, columnIndex }) {
       if (column.label == "分类") {
         if (columnIndex == 0) {

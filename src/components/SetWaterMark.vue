@@ -23,7 +23,7 @@ export default {
             if(!this.userName){
                 this.userName = await this.getAuthToken();
             }
-            if(!document.getElementById(watermark_id)){
+            if(!document.getElementById("watermark_id")){
                 dom.appendChild(getWaterMark(dom, this.userName))
             }
         },

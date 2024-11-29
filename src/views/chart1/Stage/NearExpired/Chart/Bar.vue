@@ -1,5 +1,6 @@
 <template>
   <div class="fullwidth">
+    {{ profitsData }}---{{ x_total }}
     <div
       class="stack-bar"
       ref="chart"
@@ -87,35 +88,39 @@ export default {
               color: "#999",
             },
           },
-          legend: {},
-          grid: {
+        },
+        legend: {},
+        grid: {
             top: "20%",
             right: 60,
             bottom: "15%",
             left: 60,
           },
-          xAxis: {
-            type: "category",
-            data: this.profitsData.x_list,
-            axisTick: {
-              show: false,
-            },
-            axisLine: {
-              show: false,
-            },
-            axisPointer: {
-              type: "shadow",
-            },
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: "#9b9b9b",
-                fontSize: 12,
-                fontWeight: 400,
+          xAxis: [
+            {
+              type: "category",
+              boundaryGap: true, //柱状图设为true
+              data: this.profitsData.x_list,
+              axisTick: {
+                show: false,
               },
-              margin: 20,
+              axisLine: {
+                show: false,
+              },
+              axisPointer: {
+                type: "shadow",
+              },
+              axisLabel: {
+                show: true,
+                textStyle: {
+                  color: "#9b9b9b",
+                  fontSize: 12,
+                  fontWeight: 400,
+                },
+                margin: 20,
+              },
             },
-          },
+          ],
           yAxis: [
             {
               type: "value",
@@ -183,21 +188,20 @@ export default {
               data: this.profitsData.y_list,
             },
           ],
-        },
+        // },
       };
       this.chart.setOption(option);
-
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-.fullWidth {
-    width: 100%;
-    overflow-x: auto;
+.fullwidth {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .stack-area {
-    width: 100%;
+  width: 100%;
 }
 </style>

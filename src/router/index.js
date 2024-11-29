@@ -97,6 +97,12 @@ export const constantRoutes = [
         meta: { title: 'Table2', icon: 'table' }
       },
       {
+        name: 'Table3',
+        path: 'table3',
+        component: () => import('@/views/table3/index'),
+        meta: { title: 'Table3', icon: 'table' }
+      },
+      {
         name: 'Mobile1',
         path: 'Mobile1',
         component: () => import('@/views/mobile1/index'),
@@ -107,6 +113,18 @@ export const constantRoutes = [
         path: 'Mobile2',
         component: () => import('@/views/mobile2/index'),
         meta: { title: 'Mobile2', icon: 'table' }
+      },
+      {
+        name: 'Mobile3',
+        path: 'Mobile3',
+        component: () => import('@/views/mobile3/purchase-redeem-monitor/index'),
+        meta: { title: 'Mobile3', icon: 'table' }
+      },
+      {
+        name: 'Mobile4',
+        path: 'Mobile4',
+        component: () => import('@/views/mobile/mobile4/open-model/index'),
+        meta: { title: 'Mobile4', icon: 'table' }
       },
       {
         name: 'Chart1',

@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
   <!-- 饼图 -->
-  <!-- <ChartLine/> -->
-  <!-- <TermStructrueChartPie /> -->
+  <ChartLine/>
+  <TermStructrueChartPie />
   <TermStructrueChartPieSame />
   
     <!-- <el-input v-model="filterText" placeholder="Filter keyword" style="margin-bottom:30px;" /> -->

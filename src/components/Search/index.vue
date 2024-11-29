@@ -84,7 +84,13 @@
             >
             </el-date-picker>
           </template>
-          <SearchTree ref="trees" v-else-if="item.inputType == 'tree'" v-model="item.defaultValue" :treeData="item" @setTreeFormData="setTreeFormData"></SearchTree>
+          <SearchTree
+            ref="trees"
+            v-else-if="item.inputType == 'tree'"
+            v-model="item.defaultValue"
+            :treeData="item"
+            @setTreeFormData="setTreeFormData"
+          ></SearchTree>
           <SearchSelect
             :ref="item.id"
             v-else-if="item.inputType == 'searchselect'"
@@ -97,6 +103,16 @@
             :placeHolder="item.label"
             @setMutiSelectFormData="setMutiSelectFormData"
           ></MutiSelect>
+          <MutiSelectLazyLoad
+            ref="mutiSelectLazyLoad"
+            v-else-if="item.inputType == 'mutiSelectLazyLoad'"
+            :data="item.data"
+            :allData="item"
+            :key="item.label"
+            :placeHolder="item.label"
+            @setMutiSelectFormData="setMutiSelectFormData"
+
+          />
         </TooltipWrapper>
       </el-form-item>
     </el-form>
@@ -116,12 +132,14 @@ import TooltipWrapper from "./TooltipWrapper";
 import SearchTree from "./SearchTree.vue";
 import SearchSelect from "./SearchSelect.vue";
 import MutiSelect from "./mutiSelect.vue";
+import MutiSelectLazyLoad from "./mutiSelectLazyLoad.vue";
 export default {
   components: {
     TooltipWrapper,
     SearchSelect,
     MutiSelect,
     SearchTree,
+    MutiSelectLazyLoad,
   },
   props: {
     searchData: {
@@ -145,23 +163,28 @@ export default {
     },
   },
   methods: {
-    setTreeFormData(treeForm, callBack){//获取树形组件的值
-      if(callBack){
-        callBack(this.form)
+    setTreeFormData(treeForm, callBack) {
+      //获取树形组件的值
+      if (callBack) {
+        callBack(this.form);
       }
-      for(const key in treeForm){
-        this.form[key] = treeForm[key]
+      for (const key in treeForm) {
+        this.form[key] = treeForm[key];
       }
-      this.$emit('setTreeFormData',treeForm)
+      this.$emit("setTreeFormData", treeForm);
     },
-    actionPickChange(value){
-      if(Array.isArray(value)){
-        this.$emit('sameDay',value[0].toString() == value[1]?.toString(),value)
+    actionPickChange(value) {
+      if (Array.isArray(value)) {
+        this.$emit(
+          "sameDay",
+          value[0].toString() == value[1]?.toString(),
+          value
+        );
       }
-      if(Array.isArray(value) && value.length == 2){
-        this.$emit('setDateValue',value[1])
+      if (Array.isArray(value) && value.length == 2) {
+        this.$emit("setDateValue", value[1]);
       }
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
     getRange(time) {
       if (this.isRangeDisable) {
@@ -214,12 +237,20 @@ export default {
     },
     actionExport() {
       if (this.$parent.exportExcel) {
-        let form = this.actionSearch(true)
+        let form = this.actionSearch(true);
         this.$parent.exportExcel();
       }
     },
-    startExport({header, data, filename,multiHeader=[], merges=[],appendData,appendOrigin}) {
-      import('@/vendor/Export2Excel').then(excel => {
+    startExport({
+      header,
+      data,
+      filename,
+      multiHeader = [],
+      merges = [],
+      appendData,
+      appendOrigin,
+    }) {
+      import("@/vendor/Export2Excel").then((excel) => {
         excel.export_json_to_excel({
           header: header,
           data: data,
@@ -227,16 +258,14 @@ export default {
           multiHeader: multiHeader,
           merges: merges,
           appendData: appendData,
-          appendOrigin: appendOrigin
-        })
-      }
-      )
-
+          appendOrigin: appendOrigin,
+        });
+      });
     },
-    startExportBySheet(sheetData){
-      import('@/vendor/Export2Excel').then(excel => {
-        excel.export_json_to_excel_sheets(sheetData)
-      })
+    startExportBySheet(sheetData) {
+      import("@/vendor/Export2Excel").then((excel) => {
+        excel.export_json_to_excel_sheets(sheetData);
+      });
     },
     setMutiSelectFormData(form) {
       for (const key in form) {
@@ -248,20 +277,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search-content{
+.search-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  .search-form{
+  .search-form {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    .search-item{
+    .search-item {
       margin-right: 10px;
     }
   }
-  .search-btn{
+  .search-btn {
     display: flex;
     justify-content: flex-end;
     align-items: center;
