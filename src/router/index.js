@@ -127,6 +127,12 @@ export const constantRoutes = [
         meta: { title: 'Mobile4', icon: 'table' }
       },
       {
+        name: 'Mobile5',
+        path: 'Mobile5',
+        component: () => import('@/views/mobile/mobile5/market-data/index'),
+        meta: { title: 'Mobile5', icon: 'table' }
+      },
+      {
         name: 'Chart1',
         path: 'Chart1',
         component: () => import('@/views/chart1/index'),

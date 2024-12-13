@@ -1,9 +1,9 @@
 <template>
   <!-- id="image"添加这个id即可出现水印 -->
   <!-- <SetWaterMark> -->
-  <div class="dashboard-container ">
+  <div class="dashboard-container">
     {{ common_query }}
-  <!-- ---------------移动端首页------------------ -->
+    <!-- ---------------移动端首页------------------ -->
     <!-- 头部结构 blue-bg-->
     <!-- <div class="rowbetween header-top">
       <div class="">左侧</div>
@@ -21,7 +21,7 @@
     <!-- <div class="relative">
     <img class="absolute" :style="tabSelectStyles" :src="require('@/images/zz.png')" />
   </div> -->
-  <!-- 导航栏 -->
+    <!-- 导航栏 -->
     <!-- <div class="tit_con_wrap">
       <ul class="tab_tit">
         <li
@@ -43,10 +43,10 @@
       />
       <div v-html="getTitle(item.title)"></div>
     </div> -->
-<!-- 基础结构 -->
+    <!-- 基础结构 -->
     <!-- <PublicStructure :list="list"></PublicStructure> -->
 
-     <!-- ---------------移动端首页end------------------ -->
+    <!-- ---------------移动端首页end------------------ -->
     <div class="dashboard-text">name: {{ name }}</div>
     <SearchPanel
       ref="search"
@@ -106,15 +106,15 @@
 </template>
 
 <script>
-import { getExportData } from '@/utils/exportExcel.js'
-import { mapGetters,mapState } from "vuex";
+import { getExportData } from "@/utils/exportExcel.js";
+import { mapGetters, mapState } from "vuex";
 import { getWaterMark } from "@/utils";
 import SetWaterMark from "@/components/SetWaterMark";
 import PublicStructure from "@/components/PublicStructure";
 import Calendar from "./componets/calendar";
-import dayjs from 'dayjs'
-import {roundDecimal} from '@/utils/arrOperation.js'
-import mixinTable from './componets/mixinTable';
+import dayjs from "dayjs";
+import { roundDecimal } from "@/utils/arrOperation.js";
+import mixinTable from "./componets/mixinTable";
 export default {
   name: "Dashboard",
   mixins: [mixinTable],
@@ -123,17 +123,20 @@ export default {
     PublicStructure,
     Calendar,
   },
-watch: {
-  'tableColunm': {
-    handler(val) {
-      this.$nextTick(()=>{
-        console.log("127---this.$refs.BbTable.$ref.xyTable",this.$refs.BbTable.$ref.xyTable)
-        // this.$refs.BbTable.$ref.xyTable.doLayout()
-      })
+  watch: {
+    tableColunm: {
+      handler(val) {
+        this.$nextTick(() => {
+          console.log(
+            "127---this.$refs.BbTable.$ref.xyTable",
+            this.$refs.BbTable.$ref.xyTable
+          );
+          // this.$refs.BbTable.$ref.xyTable.doLayout()
+        });
+      },
+      // immediate:true
     },
-    // immediate:true
-  }
-},
+  },
   computed: {
     ...mapGetters({
       name: "name",
@@ -146,20 +149,18 @@ watch: {
       return this.iconsAll.filter((menu) => menu.type === this.currType);
     },
   },
-  created(){
-    let date = dayjs(new Date()).add(-1,'day').format('YYYYMMDD');
-    this.formData.date = date
-   
+  created() {
+    let date = dayjs(new Date()).add(-1, "day").format("YYYYMMDD");
+    this.formData.date = date;
   },
   mounted() {
     this.$nextTick(() => {
-      this.$nextTick(()=>{
-        console.log('roundDecimal(0.0000566)', roundDecimal('0.0000566'))
+      this.$nextTick(() => {
+        console.log("roundDecimal(0.0000566)", roundDecimal("0.0000566"));
         // console.log("127---this.$refs.BbTable.$ref.xyTable",this.$refs.BbTable.$refs.xyTable)
-      })
-      
-    })
-    
+      });
+    });
+
     // console.log(
     //   "this.$formatNumber(1589992.365487,2,1)",
     //   this.$formatNumber("1589992.365487", 2, 1)
@@ -172,10 +173,8 @@ watch: {
         this.columns.split(","),
         this.columns_desc.split(",")
       );
-      this.setDefaultForm()
+      this.setDefaultForm();
     });
-
-    
   },
   beforeDestroy() {
     this.$store.commit("common/SET_COMMON_QUERY", {}); //清空查询条件
@@ -185,16 +184,16 @@ watch: {
   },
   data() {
     return {
-      pageInfo:{
+      pageInfo: {
         page_num: 1,
         page_size: 1,
         total: 6,
-        combinedColumnCount: 0
-
+        combinedColumnCount: 0,
       },
       testData: [],
-      searchData: [ //查询条件配置
-        
+      searchData: [
+        //查询条件配置
+
         // { name: "is_bot", inputType: "mutiSelect", data: [{ label: "test", value: "test" },{ label: "test", value: "test" }] },
         // { name: "tongji", inputType: "searchselect", placeholder: "统计",list:[{title:'规模',label:'规模'},{title:'规模1',label:'规模1'},{title:'规模2',label:'规模2'}],defaultValue: "规模" },
         // {
@@ -210,11 +209,10 @@ watch: {
         // { name: "is_bot", inputType: "input", content: "test" },
         // {name:'date',inputType:'date'},
         { name: "start_at--end_at", content: "test", inputType: "daterange" },
-        
+
         // {id:100510,label:"是否包含0份额产品",placeholder:'是否包含0份额产品',name: "container", inputType: "select",tips:'是否包含0份额产品' ,list: [
         //   {id:2511,name:'contain',value:'1',label: "是包含0份额产品"},{id:2512,name:'contain',value:'2',label: "否包含0份额产品"}
         // ] },
-        
       ],
       currType: "产品",
 
@@ -232,7 +230,7 @@ watch: {
           label: "日期",
           width: "180",
           align: "center",
-          sortable: true,
+          // sortable: true,
           fixed: false,
           showOverflowTooltip: true,
           type: "left",
@@ -242,7 +240,7 @@ watch: {
           label: "姓名",
           width: "180",
           align: "center",
-          sortable: true,
+          // sortable: true,
           fixed: false,
           showOverflowTooltip: true,
           type: "left",
@@ -252,7 +250,7 @@ watch: {
           label: "地址",
           width: "180",
           align: "center",
-          sortable: true,
+          // sortable: true,
           fixed: false,
           showOverflowTooltip: true,
           type: "left",
@@ -262,7 +260,7 @@ watch: {
           label: "左侧",
           width: "180",
           align: "center",
-          sortable: true,
+          // sortable: true,
           fixed: false,
           showOverflowTooltip: true,
           type: "left",
@@ -272,7 +270,7 @@ watch: {
           label: "右侧",
           width: "180",
           align: "center",
-          sortable: true,
+          // sortable: true,
           fixed: false,
           showOverflowTooltip: true,
           type: "left",
@@ -347,27 +345,25 @@ watch: {
           amount12: "",
         },
       ],
-      formData: {expired: false},
+      formData: { expired: false },
     };
   },
   methods: {
-    actionPageChange(pageInfo){
-      let param = {mapping_id:"100000",...this.formData,...this.pageInfo}
-      delete param["total"]
-      this.getData(param)
+    actionPageChange(pageInfo) {
+      let param = { mapping_id: "100000", ...this.formData, ...this.pageInfo };
+      delete param["total"];
+      this.getData(param);
     },
-    onSameDay(){
+    onSameDay() {},
+    setDefaultForm() {
+      this.$refs.search.form = {};
+      const date = dayjs(new Date()).add(-1, "day");
+      this.$set(this.$refs.search.form, "date", date);
 
-    },
-    setDefaultForm(){
-      this.$refs.search.form = {}
-      const date = dayjs(new Date()).add(-1,'day')
-      this.$set(this.$refs.search.form, 'date',date) 
-
-      this.$refs.search.form["start_at--end_at"]=[
-        dayjs(new Date()).add(-1,"day").startOf("day"),
-        dayjs(new Date()).add(-1,"day").endOf("day"),
-      ]
+      this.$refs.search.form["start_at--end_at"] = [
+        dayjs(new Date()).add(-1, "day").startOf("day"),
+        dayjs(new Date()).add(-1, "day").endOf("day"),
+      ];
     },
     test() {
       let searchList = [
@@ -570,8 +566,8 @@ watch: {
             label: column.label,
             selected: true,
             prop: column.prop,
-            sortable: "custom",
-            tooltip: { show: true, content: "test" },
+            // sortable: "custom",
+            // tooltip: { show: true, content: "test" },
           });
         } else {
           console.log(
@@ -584,15 +580,15 @@ watch: {
               label: column.parentLabel,
               selected: true,
               prop: "test" + Math.random(),
-              sortable: "custom",
-              tooltip: { show: true, content: "test" },
+              // sortable: "custom",
+              // tooltip: { show: true, content: "test" },
               columns: [
                 {
                   label: column.label,
                   selected: true,
                   prop: column.prop,
-                  sortable: "custom",
-                  tooltip: { show: true, content: "test" },
+                  // sortable: "custom",
+                  // tooltip: { show: true, content: "test" },
                 },
               ],
             });
@@ -603,8 +599,8 @@ watch: {
                 label: column.label,
                 selected: true,
                 prop: column.prop,
-                sortable: "custom",
-                tooltip: { show: true, content: "test" },
+                // sortable: "custom",
+                // tooltip: { show: true, content: "test" },
               });
           }
         }
@@ -624,7 +620,7 @@ watch: {
           selected: true,
           content: "test",
           prop: columns[0].prop + Math.random(),
-          sortable: "custom",
+          // sortable: "custom",
           columns: columns.slice(0, this.combinedColumnCount).map((item) => {
             return { ...item };
           }),
@@ -677,9 +673,14 @@ watch: {
     },
     exportExcel() {
       // let result = getExportData(this.tableColumns,this.tableData,'title',['title'],[]);
-      let result = getExportData(this.tableColumns,this.tableData,'title',[]);
+      let result = getExportData(
+        this.tableColumns,
+        this.tableData,
+        "title",
+        []
+      );
       this.$refs.search.startExport(result);
-    }
+    },
   },
 };
 </script>

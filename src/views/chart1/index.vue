@@ -147,7 +147,7 @@ export default {
 
         
       ],
-      activeName: "5",
+      activeName: "4",
       lineType: "1行2列",
       isBaphd: isBaphd(),
       pageInfo: {

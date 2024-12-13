@@ -5,7 +5,8 @@
       :searchData="searchData"
       @actionSearch="actionSearch"
     />
-    <!-- <TableSetting :tableColumnSetting="tableColumns"></TableSetting> -->
+    <div class="bcwhite relative">
+    <TableSetting class="absolute" style="top:1px;right:1px;z-index:20" :tableColumnSetting="tableColumns"></TableSetting>
     <BbTable
       :table-column="tableColumns"
       :table-data="tableData"
@@ -13,8 +14,13 @@
       :table-head-style="setTableHeadStyle"
     ></BbTable>
   </div>
+  </div>
 </template>
 <script>
+/**
+ * 单层表头
+ * 双层表头
+ */
 import { productColumns } from "./tableColumn.js";
 import dayjs from "dayjs";
 export default {
@@ -23,17 +29,65 @@ export default {
     return {
       searchData: [
         { name: "date", inputType: "date" },
-        { inputType: "mutiSelectLazyLoad",data:[{id:2001,label:'子产品代码,父产品代码',
-        list:[{id:3001,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3002,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3003,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3004,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3005,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3006,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3007,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3008,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-          {id:3009,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
-        ]}] },
+        {
+          inputType: "mutiSelectLazyLoad",
+          // data:[{id:2001,label:'子产品代码,父产品代码,产品全称,父产品简称,子产品简称',
+          // list:[{id:3001,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
+          //   {id:3002,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
+          //   {id:3003,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
+          //   {id:3004,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
+          //   {id:3005,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
+          //   {id:3006,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
+          //   {id:3007,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
+          //   {id:3008,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
+          //   {id:3009,label:'A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开'},
+          // ]}],
+          data: [
+            {
+              id: 3001,
+              label: "A181A4851,A181A4853,中信理财,中信理财,乐赢纯债半年开",
+            },
+            {
+              id: 3002,
+              label: "A181A4852,A181A4853,中信理财,中信理财,乐赢纯债半年开",
+            },
+            {
+              id: 3003,
+              label: "A181A4853,A181A4853,中信理财,中信理财,乐赢纯债半年开",
+              name: "chrem_prod_id",
+            },
+            {
+              id: 3004,
+              label: "A181A4854,A181A4853,中信理财,中信理财,乐赢纯债半年开",
+              name: "chrem_prod_id",
+            },
+            {
+              id: 3005,
+              label: "A181A4855,A181A4853,中信理财,中信理财,乐赢纯债半年开",
+              name: "chrem_prod_id",
+            },
+            {
+              id: 3006,
+              label: "A181A4856,A181A4853,中信理财,中信理财,乐赢纯债半年开",
+              name: "chrem_prod_id",
+            },
+            {
+              id: 3007,
+              label: "A181A4857,A181A4853,中信理财,中信理财,乐赢纯债半年开",
+              name: "chrem_prod_id",
+            },
+            {
+              id: 3008,
+              label: "A181A4858,A181A4853,中信理财,中信理财,乐赢纯债半年开",
+              name: "chrem_prod_id",
+            },
+            {
+              id: 3009,
+              label: "A181A4859,A181A4853,中信理财,中信理财,乐赢纯债半年开",
+              name: "chrem_prod_id",
+            },
+          ],
+        },
         {
           id: 1002,
           label: "产品分类",
@@ -223,6 +277,7 @@ export default {
     console.log("table1 mounted");
   },
   methods: {
+    // 单行合并同类项（表头）
     setTableHeadStyle({ row, column, rowIndex, columnIndex }) {
       if (column.label == "分类") {
         if (columnIndex == 0) {
@@ -336,7 +391,27 @@ export default {
       });
       return columnObjArr;
     },
-    modifyData(list) {
+    // 获取单行表头
+    getTableColumnOneRow(
+      allColumns,
+      columnsDes,
+      ColumnAligns = [],
+      tableName = ""
+    ) {
+      let table = [];
+      for (let i = 0; i < allColumns.length; i++) {
+        let newItem = {};
+        newItem.prop = allColumns[i];
+        newItem.label = columnsDes[i];
+        newItem.selected = true;
+        newItem.minWidth = 120;
+        if (allColumns.length == ColumnAligns.length) {
+          newItem.align = ColumnAligns[i];
+        }
+        table.push(newItem);
+      }
+    },
+    modifyData(list) {//改变原数组的方式
       if (list) {
         for (let item of list) {
           [""].map((key) => {
@@ -345,6 +420,27 @@ export default {
               : this.$formatNumber(item[key], 2, 1);
           });
         }
+      }
+      return list || [];
+    },
+    modifyData2(list) {//不改变原数组的方式
+      if (Array.isArray(list)) {
+        return list.map((row) => {
+          return Object.fromEntries(
+            Object.entries(row).map((kvArr) => {
+              const [field, fieldValue] = kvArr;
+              if (field === "INS_NAME") {
+                return [field, fieldValue];
+              } else if (["NEW_PD_PCT"].includes(field)) {
+                // 占比
+                const val = this.$formatNumber(fieldValue, 2, 1);
+                return [field, val === "-" ? "-" : `${val}%`];
+              }else{
+                return [field, this.$formatNumber(fieldValue, 2, 1)];
+              }
+            })
+          );
+        });
       }
       return list || [];
     },

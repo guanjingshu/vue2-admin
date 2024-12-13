@@ -6,6 +6,8 @@
     <SearchPanelWrapper @updateSearchParams="updateSearchParams"/>
     <!-- 产品情况 -->
     <ProductInfo />
+    <!-- 兑付情况 -->
+    <PayOverall />
 
     </div>
 </template>
@@ -13,12 +15,14 @@
 import ProductInfo from './Card/ProductInfo.vue'
 import Highlight from './Card/Highlight.vue';
 import SearchPanelWrapper from './Card/SearchPanelWrapper.vue';
+import PayOverall from './Card/PayOverall.vue';
 export default {
     name: 'Run',
     components: {
         ProductInfo,
         Highlight,
-        SearchPanelWrapper
+        SearchPanelWrapper,
+        PayOverall
     },
     data() {
         return {}
