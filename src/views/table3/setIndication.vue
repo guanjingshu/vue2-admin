@@ -37,8 +37,8 @@
         </el-table>
       </el-form>
       <div slot="footer">
-        <el-button class="btn" @click="">取消</el-button>
-        <el-button class="btn btn_te" @click="">提交</el-button>
+        <el-button class="btn" @click="handleClose">取消</el-button>
+        <el-button class="btn btn_te" @click="handleSubmit">提交</el-button>
       </div>
     </el-dialog>
   </div>

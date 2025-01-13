@@ -14,10 +14,15 @@ export default {
   created() {},
   methods: {
     getColumnsFour(table, columnsData, columnsDesData) {
-      const columns = columnsData;
-      const columnsDes = columnsDesData.map((item, index) => {
-        return `${item}${"*".repeat(index)}`;
-      });
+      try {
+        
+     
+      const columns = 'busiType1,busiType2,busiType3,财富-固收$货币$2024/9/1$A'.split(",");
+      const columnsDesc = '业务类型1,业务类型2,业务类型3,财富-固收$货币$2024/9/1$时点规模（亿元）'.split(",");
+      // const columns = columnsData;
+      // const columnsDes = columnsDesData.map((item, index) => {
+      //   return `${item}${"*".repeat(index)}`;
+      // });
 
       // columnsDesc
       const level1Set = new Set();
@@ -36,7 +41,7 @@ export default {
           labelLevel1Set.add(columnsDesc[index]);
         } else {
           const allLevelProps = prop.split("$"); //['财富-固收','货币', '2024/9/1','A']
-          const allLevelLabels = columnsDes[index].split("$"); //['财富-固收','货币', '2024/9/1','时点规模（亿元）']
+          const allLevelLabels = columnsDesc[index].split("$"); //['财富-固收','货币', '2024/9/1','时点规模（亿元）']
           level1Set.add(allLevelProps[0]);
           labelLevel1Set.add(allLevelLabels[0]);
           level2Set.add(`${allLevelProps[0]}$${allLevelProps[1]}`);
@@ -170,7 +175,12 @@ export default {
       // -----------end 合并成一列-----------
 
       this.tableColumnsProp = allColumns;
+      console.log("tableColumnsProp--", this.tableColumnsProp);
       return this.tableColumnsFour;
+    } catch (error) {
+        console.log("error--", error);
+    }
+      
     },
   },
 };

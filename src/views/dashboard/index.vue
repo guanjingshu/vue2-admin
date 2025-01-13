@@ -2,7 +2,8 @@
   <!-- id="image"添加这个id即可出现水印 -->
   <!-- <SetWaterMark> -->
   <div class="dashboard-container">
-    {{ common_query }}
+    <!-- {{ common_query }}
+    {{ tableColumnsFour }} -->
     <!-- ---------------移动端首页------------------ -->
     <!-- 头部结构 blue-bg-->
     <!-- <div class="rowbetween header-top">
@@ -48,27 +49,27 @@
 
     <!-- ---------------移动端首页end------------------ -->
     <div class="dashboard-text">name: {{ name }}</div>
+    <el-button @click="importFn('销售归属配置导入')">导入</el-button>
     <SearchPanel
       ref="search"
       :searchData="searchData"
       @sameDay="onSameDay"
       @actionSearch="actionSearch"
     />
-    <!-- <TableSetting :tableColumnSetting="tableColumns"></TableSetting> -->
+    <!-- <TableSetting :tableColumnSetting="tableColumns"></TableSetting>  :noOperation="true"-->
     <BbTable
       ref="BbTable"
-      :table-column="tableColumns"
+      :table-column="tableColumnsFour"
       :table-data="tableData"
       :table-head-style="setTableHeadStyle"
       :cell-style="(params) => cellStyle(params, '01')"
-      :noOperation="true"
+      
       :SortChangeFn="actionSortChange"
       :showPage="true"
       :pageInfo="pageInfo"
     >
-      <template slot-scope="row">
+      <!-- <template slot-scope="row">
         <div class="table_btns">
-          <!-- `popover-${row.$index}` -->
           <el-popover
             popper-class="del-popover"
             trigger="manual"
@@ -97,10 +98,11 @@
             >
           </el-popover>
         </div>
-      </template>
+      </template> -->
     </BbTable>
     <!-- <p v-for="(item,index) in 100" :key="index">111</p> -->
     <!-- <Calendar /> -->
+    <importConfigGuration v-if="setimportConfigGuration" :setConFlag="setimportConfigGuration" @setting="handleimportConfigGuration"></importConfigGuration>
   </div>
   <!-- </SetWaterMark> -->
 </template>
@@ -115,6 +117,8 @@ import Calendar from "./componets/calendar";
 import dayjs from "dayjs";
 import { roundDecimal } from "@/utils/arrOperation.js";
 import mixinTable from "./componets/mixinTable";
+
+import importConfigGuration from "./componets/importConfigGuration.vue";
 export default {
   name: "Dashboard",
   mixins: [mixinTable],
@@ -122,6 +126,7 @@ export default {
     SetWaterMark,
     PublicStructure,
     Calendar,
+    importConfigGuration
   },
   watch: {
     tableColunm: {
@@ -154,6 +159,7 @@ export default {
     this.formData.date = date;
   },
   mounted() {
+    this.getColumnsFour();
     this.$nextTick(() => {
       this.$nextTick(() => {
         console.log("roundDecimal(0.0000566)", roundDecimal("0.0000566"));
@@ -184,6 +190,7 @@ export default {
   },
   data() {
     return {
+      setimportConfigGuration: false,
       pageInfo: {
         page_num: 1,
         page_size: 1,
@@ -349,6 +356,13 @@ export default {
     };
   },
   methods: {
+    handleimportConfigGuration() {
+      this.setimportConfigGuration = true;
+    },
+    importFn(){
+      this.setimportConfigGuration = true;
+
+    },
     actionPageChange(pageInfo) {
       let param = { mapping_id: "100000", ...this.formData, ...this.pageInfo };
       delete param["total"];

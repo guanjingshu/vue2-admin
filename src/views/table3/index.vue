@@ -14,6 +14,7 @@
         :table-column="tableColumns"
         :table-data="tableData"
         :rowSpans="rowSpans"
+        :cellStyle="cellStyle"
         :table-head-style="setTableHeadStyle"
         :noOperation="true"
       >
@@ -53,7 +54,7 @@
           </div>
         </template>
       </BbTable>
-      <setIndication v-if="setConFlag" :tip_title="tip_title" :setConFlag="setConFlag"></setIndication>
+      <setIndication v-if="setConFlag" :tip_title="tip_title" :setConFlag="setConFlag" @setting="handleClose"></setIndication>
     </div>
   </div>
 </template>
@@ -261,6 +262,22 @@ export default {
     console.log("table1 mounted");
   },
   methods: {
+    cellStyle({row, column, rowIndex, columnIndex}){
+      let cellColor = {}
+      if(row.PROD_TYPE === '小计' && columnIndex > 0){
+        cellColor.background = '#E1EAFD'
+        cellColor.fontWeight = '600'
+        cellColor.borderRight = 'none'
+      }
+      if(columnIndex > 0){
+        cellColor.borderRight = 'none'
+      }
+      if(row.INSTI === '合计'){
+        cellColor.background = '#D7E3FD'
+        cellColor.fontWeight = '600'
+      }
+      return cellColor
+    },
     addRule(title_tip){
       this.setConFlag = true
       this.tip_title = title_tip;
@@ -269,10 +286,38 @@ export default {
     },
     checkCanEdit(){},
     showDialog(){},
-    doClose(){},
-    deleteT(){},
+    
+    deleteT(){
+      this.$refs.mytable.clearSelectionFn();
+      this.previousPage()
+      this.$refs[`popover-` + index].doClose()
+    },
+    previousPage(){
+      // 判断当前数据是否需要返回前一页
+      const totalPage = Math.ceil(
+        (this.pageInfo.total - 1) / this.pageInfo.page_size
+      );
+      this.pageInfo.page_num = 
+      this.pageInfo.page_num > totalPage ? totalPage : this.pageInfo.page_num;
+      this.pageInfo.page_num <= 1 ? 1 : this.pageInfo.page_num;
+    },
     checkCanDel(){},
-    showDia(){},
+    // 删除打开
+    showDia(row, index){
+      // 开启弹窗之前关闭所有的弹框
+      for(const key in this.$refs){
+        if(key != `popover-` + index && key != "search" && key != "mytable"){
+          this.$refs[key] && this.$refs[key].doClose();
+        }
+      }
+      this.$refs[`popover-`+index].doShow();
+    },
+    doClose(row, index){
+      this.$refs[`popover-`+index].doClose()
+    },
+    handleClose(){
+      this.setConFlag=false
+    },
     setTableHeadStyle({ row, column, rowIndex, columnIndex }) {
       if (column.label == "分类") {
         if (columnIndex == 0) {

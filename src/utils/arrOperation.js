@@ -111,3 +111,14 @@ export function roundDecimal(floatNumber) {
   }
   return floatNumber;
 }
+export function roundDecimal2(floatNumber) {
+  if(parseFloat(floatNumber)===null) {return '-'};
+  if(parseFloat(floatNumber)===0) {return 0};
+  if(floatNumber !== null && parseFloat(floatNumber) !== 0 && floatNumber !== '-' && typeof(floatNumber)  !== 'number'){
+  const index = floatNumber.split('.')[1].split('').findIndex(num => /[1-9]/.test(num));
+  if(index > -1){
+    return Math.round(parseFloat(floatNumber) * Math.pow(10, index + 1)) / Math.pow(10, index + 1);
+  }
+}
+  return floatNumber;
+}
