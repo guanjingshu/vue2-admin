@@ -26,7 +26,8 @@
             </el-form-item>
           </el-col>
         </el-row>
-        
+        <div>分类规则</div>
+        <el-button type="primary" @click="addNewRuleGroup(maxRuleGroupIndex)">新建条件组</el-button>
         <el-table>
           <el-table-column label="一级分类" props="test1"></el-table-column>
           <el-table-column label="二级分类" props="test2"></el-table-column>
@@ -89,6 +90,12 @@ export default {
   },
   created(){},
   methods:{
+    addNewRuleGroup(){
+      this.handleAdd(maxRuleGroup + 1)
+    },
+    handleAdd(){
+      
+    },
     objectSpanMethod({ row, column, rowIndex, columnIndex }){
       for(let item of this.rowSpans){
         if(column.property == item.columnName){

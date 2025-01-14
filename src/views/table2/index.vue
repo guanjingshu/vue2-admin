@@ -226,7 +226,7 @@
         </template>
       </el-table-column>
     </el-table> -->
-
+{{ dimensionList }}
     <div class="table_title">分类规则</div>
     <el-button
       type="primary"
@@ -783,6 +783,21 @@ export default {
       this.dimensionList = this.dimensionList.filter(
         (ruleRow) => ruleRow.rule_group !== rule_group
       );
+    },
+    handleDelete(index, ruleRow) {
+      this.dimensionList.splice(index, 1);
+    },
+    // 检查数组是否有重复项
+    hasDuplicate(array){
+      const seen = new Set();
+      for(let i = 0; i < array.length; i++){
+        const objString = JSON.stringify(array[i]);
+        if(seen.has(objString)){
+          return true;
+        }
+        seen.add(objString);
+      }
+      return false;
     },
     filterDimensionList(rule_group) {
       // 记录比较关键的index索引，替代scope.$index
