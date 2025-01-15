@@ -103,6 +103,12 @@ export const constantRoutes = [
         meta: { title: 'Table3', icon: 'table' }
       },
       {
+        name: 'Table4',
+        path: 'table4',
+        component: () => import('@/views/table4/index'),
+        meta: { title: 'Table4', icon: 'table' }
+      },
+      {
         name: 'Mobile1',
         path: 'Mobile1',
         component: () => import('@/views/mobile1/index'),
