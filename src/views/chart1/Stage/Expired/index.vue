@@ -1,9 +1,15 @@
 <template>
-    <div>expired</div>
+    <div>
+        <PerformanceOverall></PerformanceOverall>
+    </div>
 </template>
 <script>
+import PerformanceOverall from './Card/PerformanceOverall.vue';
 export default {
     name: 'Expired',
+    components: {
+        PerformanceOverall
+    },
     data() {
         return {}
     },

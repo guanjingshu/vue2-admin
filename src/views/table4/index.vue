@@ -1,5 +1,6 @@
 <template>
   <div>
+   <div ref="chartleft"></div>
     <div  >
       <el-table class="el-table" ref="rule_table" :data="tableData" style="width: 100%" :style="isShowChart?'height:410px;transition: all 0.5s':'height:0px;transition: all 0.5s'">
         <el-table-column prop="date" label="日期" width="180"> </el-table-column>
@@ -16,9 +17,13 @@
 
 <script>
 import Sortable from "sortablejs";
+import { OptionInitFn } from "./tableColumn";
 export default {
   mounted() {
     this.rowDragDrop();
+    this.$nextTick(() => {
+      this.initChart();
+    });
   },
   data() {
     return {
@@ -45,9 +50,15 @@ export default {
         },
       ],
       isShowChart: true,
+      chart:null
     };
   },
   methods:{
+    initChart(){
+      this.chart = this.$echarts.init(this.$refs.chartleft);
+      this.chart.setOption({...OptionInitFn('年固定管理费','固定管理费',[],[],[]),
+    series: [{data:[]},{data:[]}]});
+    },
     rowDragDrop(){
       const tableNormal = this.$refs['rule_table'].$el.querySelectorAll('.el-table__body-wrapper tbody')[0]; // 获取表格
       this.bindTableDragDrop(tableNormal); // 调用方法
